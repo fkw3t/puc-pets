@@ -55,4 +55,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function pets(): HasMany
+    {
+        return $this->hasMany(Pet::class, 'owner_id', 'id');
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class, 'client_id', 'id');
+    }
 }

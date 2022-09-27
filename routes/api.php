@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Pet;
+use App\Models\Vet;
 use App\Models\User;
 use App\Models\Expense;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -41,33 +44,52 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::get('/', function () {
 
-    // date_default_timezone_set('America/Sao_Paulo');
-    // $user = new User();
-    // $user->name = 'Eliabner Teixera Marques';
-    // $user->email = 'eliabner.marques@mail.com';
-    // $user->document_id = '15196832602';
-    // $user->person_type = 'fisical';
-    // $user->phone = '31997467665';
-    // $user->password = Hash::make('test123');
-    // $user->save();
+    date_default_timezone_set('America/Sao_Paulo');
+    $user = new User();
+    $user->name = 'Eliabner Teixera Marques';
+    $user->email = 'eliabner.marques@mail.com';
+    $user->document_id = '15196832602';
+    $user->phone = '31997467665';
+    $user->password = Hash::make('test123');
+    $user->save();
+    
+    $user1 = new User();
+    $user1->name = 'Guilhermino';
+    $user1->email = 'mail@mail.com';
+    $user1->document_id = '15196832601';
+    $user1->phone = '31997467665';
+    $user1->password = Hash::make('test123');
+    $user1->save();
+
+    $vet = new Vet();
+    $vet->user_id = $user1->id;
+    $vet->crm = '123456';
+    $vet->specialization = 'Nutrição Animal';
+    $vet->save();
+
+    $schedule = new Schedule();
+    $schedule->vet_id = $vet->id;
+    $schedule->client_id = $user->id;
+    $schedule->date = new DateTime();
+    $schedule->save();
+
+    // $teslinha = new Pet();
+    // $teslinha->name = 'Teslinha';
+    // $teslinha->type = 'dog';
+    // $teslinha->owner_id = $user->id;
+    // $teslinha->size = 'small';
+    // $teslinha->save();
+    
+    // $zed = new Pet();
+    // $zed->name = 'Zed';
+    // $zed->type = 'cat';
+    // $zed->owner_id = $user->id;
+    // $zed->size = 'small';
+    // $zed->save();
 
 
-    // $expense = new Expense();
-    // $expense->description = 'dinner';
-    // $expense->occurred_in = new DateTime();
-    // $expense->user_id = $user->id;
-    // $expense->amount = 55.8;
-    // $expense->save();
-
-    // $expense = new Expense();
-    // $expense->description = 'lunch';
-    // $expense->occurred_in = new DateTime();
-    // $expense->user_id = $user->id;
-    // $expense->amount = 72.5;
-    // $expense->save();
-
-    // return [
-    //     'user' => $user,
-    //     'expenses' => $user->expenses
-    // ];
+    return [
+        'user' => $user->schedules,
+        'vet' => $vet->schedules
+    ];
 });

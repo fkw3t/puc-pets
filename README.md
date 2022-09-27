@@ -59,6 +59,7 @@
     * id: int
     * name: varchar
     * size: enum
+    * owner_id: int
     * timestamps: datetime
 
 - table: vet
@@ -76,7 +77,9 @@
 
 - table: services
     * id: int
+    * type: enum(aesthetic, vet consult, accommodation)
     * description: varchar
+    * provider: enum
 
 - table: consult
     * id: int
