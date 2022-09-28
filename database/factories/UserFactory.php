@@ -18,22 +18,11 @@ class UserFactory extends Factory
     public function definition()
     {
         $faker = \Faker\Factory::create('pt_BR');
-        $rand = rand(0,1);
-        
-        if($rand === 0){
-            $document_id = $faker->cpf;
-            $person_type = 'fisical';
-        }
-        else{
-            $document_id = $faker->cnpj;
-            $person_type = 'legal';
-        }
 
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'document_id' => $document_id,
-            'person_type' => $person_type,
+            'document_id' => $faker->cpf,
             'phone' => fake()->phoneNumber(),
             'email_verified_at' => now(),
             'password' => 'test123', // password

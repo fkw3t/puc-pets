@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources\Pet;
 
-use App\Http\Resources\Expense\ExpenseResource;
-use App\Http\Resources\Pet\PetResource;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class PetResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,10 +18,9 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'document' => $this->document_id,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'pets' => PetResource::collection($this->pets)
+            'type' => $this->type,
+            'size' => $this->size,
+            'owner' => new UserResource($this->owner)
         ];
     }
 }

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\PetController;
+use App\Http\Controllers\VetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +35,15 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 
     Route::group(['middleware' => 'jwt.auth'], function () {
-
+        
         Route::apiResource('user', UserController::class)->except(['store']);
         Route::get('user/document/{document}', [UserController::class, 'showByDocument']);
+        Route::get('user/{id}/pet', [UserController::class, 'pets']);
+        
+        Route::apiResource('vet', VetController::class);
+        Route::get('vet/document/{document}', [VetController::class, 'showByCRM']);
+        
+        Route::apiResource('pet', PetController::class);
 
     });
 
@@ -44,52 +52,52 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::get('/', function () {
 
-    date_default_timezone_set('America/Sao_Paulo');
-    $user = new User();
-    $user->name = 'Eliabner Teixera Marques';
-    $user->email = 'eliabner.marques@mail.com';
-    $user->document_id = '15196832602';
-    $user->phone = '31997467665';
-    $user->password = Hash::make('test123');
-    $user->save();
+    // date_default_timezone_set('America/Sao_Paulo');
+    // $user = new User();
+    // $user->name = 'Eliabner Teixera Marques';
+    // $user->email = 'eliabner.marques@mail.com';
+    // $user->document_id = '15196832602';
+    // $user->phone = '31997467665';
+    // $user->password = Hash::make('test123');
+    // $user->save();
     
-    $user1 = new User();
-    $user1->name = 'Guilhermino';
-    $user1->email = 'mail@mail.com';
-    $user1->document_id = '15196832601';
-    $user1->phone = '31997467665';
-    $user1->password = Hash::make('test123');
-    $user1->save();
+    // $user1 = new User();
+    // $user1->name = 'Guilhermino';
+    // $user1->email = 'mail@mail.com';
+    // $user1->document_id = '15196832601';
+    // $user1->phone = '31997467665';
+    // $user1->password = Hash::make('test123');
+    // $user1->save();
 
-    $vet = new Vet();
-    $vet->user_id = $user1->id;
-    $vet->crm = '123456';
-    $vet->specialization = 'Nutrição Animal';
-    $vet->save();
+    // $vet = new Vet();
+    // $vet->user_id = $user1->id;
+    // $vet->crm = '123456';
+    // $vet->specialization = 'Nutrição Animal';
+    // $vet->save();
 
-    $schedule = new Schedule();
-    $schedule->vet_id = $vet->id;
-    $schedule->client_id = $user->id;
-    $schedule->date = new DateTime();
-    $schedule->save();
+    // $schedule = new Schedule();
+    // $schedule->vet_id = $vet->id;
+    // $schedule->client_id = $user->id;
+    // $schedule->date = new DateTime();
+    // $schedule->save();
 
     // $teslinha = new Pet();
     // $teslinha->name = 'Teslinha';
     // $teslinha->type = 'dog';
-    // $teslinha->owner_id = $user->id;
+    // $teslinha->owner_id = 1;
     // $teslinha->size = 'small';
     // $teslinha->save();
     
     // $zed = new Pet();
     // $zed->name = 'Zed';
     // $zed->type = 'cat';
-    // $zed->owner_id = $user->id;
+    // $zed->owner_id = 1;
     // $zed->size = 'small';
     // $zed->save();
 
 
-    return [
-        'user' => $user->schedules,
-        'vet' => $vet->schedules
-    ];
+    // return [
+    //     'user' => $user->schedules,
+    //     'vet' => $vet->schedules
+    // ];
 });

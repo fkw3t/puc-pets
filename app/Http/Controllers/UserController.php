@@ -13,53 +13,42 @@ use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserCollection;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Services\UserService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class UserController extends Controller
 {
-    protected UserService $service;
-
-    public function __construct(UserService $service)
-    {
-        $this->service = $service;
-    }
 
     public function index(): JsonResource
     {
-        $users = $this->service->index();
+        $users = User::all();
 
         return new UserCollection($users);
     }
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        if ($this->service->store($request)){
-            return response()->json([
-                'message' => 'Successfully created'
-            ], 201);
-        }
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']);
+        User::create($data);
 
         return response()->json([
-            'message' => ' Error to process entity'
-        ], 500);
+            'message' => 'Successfully created'
+        ], 201);
     }
 
-    public function show(string $id): JsonResource|JsonResponse
+    public function show(int $id): JsonResource|JsonResponse
     {
-        try {
-            $user = $this->service->show($id);
-            return new UserResource($user);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], $e->getCode());
+        $user = User::find($id);
+
+        if (!$user) {
+            throw new DomainException('Content not found', 204);
         }
+
+        return new UserResource($user);
     }
 
     public function showByDocument(string $document): JsonResource
     {
-        // TODO add service layer and filter exceptions
         $user = User::firstWhere('document_id', $document);
 
         if (!$user) {
@@ -69,9 +58,8 @@ final class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function update(UpdateUserRequest $request, string $id): JsonResponse
+    public function update(UpdateUserRequest $request, int $id): JsonResponse
     {
-        // TODO add service layer and filter exceptions
         $user = User::find($id);
 
         if (!$user) {
@@ -91,15 +79,13 @@ final class UserController extends Controller
             'password'
         ]));
 
-
         return response()->json([
             'message' => 'Successfully updated'
         ], 200);
     }
 
-    public function destroy(Request $request, string $id): JsonResponse
+    public function destroy(Request $request, int $id): JsonResponse
     {
-        // TODO add service layer and filter exceptions
         $user = User::find($id);
 
         if (!$user) {
@@ -116,6 +102,19 @@ final class UserController extends Controller
 
         return response()->json([
             'message' => 'Successfully deleted'
+        ], 200);
+    }
+
+    public function pets(int $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            throw new DomainException('Content not found', 204);
+        }
+
+        return response()->json([
+            'data' => $user->pets
         ], 200);
     }
 }

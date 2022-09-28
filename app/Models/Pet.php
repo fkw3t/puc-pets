@@ -14,7 +14,7 @@ class Pet extends Model
         'name',
         'type',
         'size',
-        'owner'
+        'owner_id'
     ];
 
     public function owner(): BelongsTo

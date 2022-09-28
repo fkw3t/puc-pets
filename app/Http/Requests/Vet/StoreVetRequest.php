@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Vet;
 
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class StoreUserRequest extends FormRequest
+class StoreVetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,19 +27,15 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
-            'document_id' => ['required', 'unique:users', 'numeric', 'digits:11'],
-            'email' => ['required', 'unique:users', 'email'],
-            'phone' => ['required', 'string', 'regex:/^\([1-9]{2}\) (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$/'],
-            'password' => ['required', 'string'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'crm' => ['required', 'string', 'max:12'],
+            'specialization' => ['required', 'string', 'max:128']
         ];
     }
 
     public function messages()
     {
-        return [
-            'phone.regex' => 'Invalid phone format, please use: \'(XX) XXXXX-XXXX\'',
-        ];
+        // 
     }
 
     protected function failedValidation(Validator $validator)
