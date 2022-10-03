@@ -15,9 +15,27 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @OA\Info(
+ *     version="1.0",
+ *     title="PUC PETS - docs"
+ * )
+ */
 final class UserController extends Controller
 {
 
+    /**
+     * @OA\Get(
+     *  tags={"users"},
+     *  path="/api/auth/user",
+     *  operationId="listUsers",
+     *  summary="list all users in system",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function index(): JsonResource
     {
         $users = User::all();
@@ -25,6 +43,51 @@ final class UserController extends Controller
         return new UserCollection($users);
     }
 
+    /**
+     * @OA\Post(
+     *  tags={"authentication"},
+     *  path="/api/auth/register",
+     *  operationId="create account",
+     *  summary="create account to access the system",
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="document_id",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="phone",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={
+     *                          "name": "Roberto Augusto",
+     *                          "document_id": "123456789012",
+     *                          "email": "mail@mail.com",
+     *                          "phone": "(31) 91234-5678",
+     *                          "password": 1234678
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  )
+     * )
+     */
     public function store(StoreUserRequest $request): JsonResponse
     {
         $data = $request->all();
@@ -36,6 +99,28 @@ final class UserController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"users"},
+     *  path="/api/auth/user/{id}",
+     *  operationId="listUserById",
+     *  summary="list user by id",
+     *  @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function show(int $id): JsonResource|JsonResponse
     {
         $user = User::find($id);

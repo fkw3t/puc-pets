@@ -26,15 +26,16 @@ use App\Http\Controllers\VetController;
 */
 
 Route::group(['prefix' => 'auth'], function ($router) {
-
+    
     Route::post('register', [UserController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class ,'logout']);
-    Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::get('me', [AuthController::class, 'me']);
-
-
+    
+    
     Route::group(['middleware' => 'jwt.auth'], function () {
+
+        Route::post('logout', [AuthController::class ,'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::get('me', [AuthController::class, 'me']);
         
         Route::apiResource('user', UserController::class)->except(['store']);
         Route::get('user/document/{document}', [UserController::class, 'showByDocument']);

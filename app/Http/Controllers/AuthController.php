@@ -14,6 +14,51 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
+
+    /**
+     * @OA\Post(
+     *  tags={"authentication"},
+     *  path="/api/auth/login",
+     *  operationId="login",
+     *  summary="make login to get authenticated",
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={"email": "eliabner.marques@mail.com", "password": "test123"}
+     *             )
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={"email": "mail@mail.com", "password": "1234678"}
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  @OA\Response(response="401",
+     *    description="Invalid Credentials",
+     *  ),
+     * )
+     */
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
@@ -24,6 +69,18 @@ class AuthController extends Controller
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"authentication"},
+     *  path="/api/auth/me",
+     *  operationId="authUserDetails",
+     *  summary="details about signed account as token and user detail",
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function me(): JsonResponse
     {
         $user = auth()->user();
@@ -31,6 +88,18 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    /**
+     * @OA\Post(
+     *  tags={"authentication"},
+     *  path="/api/auth/logout",
+     *  operationId="logout",
+     *  summary="logout and revoke token",
+     *  @OA\Response(response="200",
+     *    description="Successfully logged out",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function logout(): JsonResponse
     {
         auth()->logout();
@@ -38,6 +107,18 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    /**
+     * @OA\Post(
+     *  tags={"authentication"},
+     *  path="/api/auth/refresh",
+     *  operationId="refreshToken",
+     *  summary="refresh actual token",
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function refresh(): JsonResponse
     {
         return $this->respondWithToken(auth()->refresh());

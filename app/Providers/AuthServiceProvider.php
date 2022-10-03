@@ -4,6 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Expense;
+use App\Models\Pet;
+use App\Models\Schedule;
+use App\Policies\PetPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -16,6 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        Pet::class => PetPolicy::class,
+        Schedule::class => Schedule::class,
     ];
 
     /**
