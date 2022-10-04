@@ -26,24 +26,24 @@ use App\Http\Controllers\VetController;
 */
 
 Route::group(['prefix' => 'auth'], function ($router) {
-    
+
     Route::post('register', [UserController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
-    
-    
+
+
     Route::group(['middleware' => 'jwt.auth'], function () {
 
         Route::post('logout', [AuthController::class ,'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::get('me', [AuthController::class, 'me']);
-        
+
         Route::apiResource('user', UserController::class)->except(['store']);
         Route::get('user/document/{document}', [UserController::class, 'showByDocument']);
         Route::get('user/{id}/pet', [UserController::class, 'pets']);
-        
+
         Route::apiResource('vet', VetController::class);
         Route::get('vet/document/{document}', [VetController::class, 'showByCRM']);
-        
+
         Route::apiResource('pet', PetController::class);
 
     });
@@ -61,7 +61,7 @@ Route::get('/', function () {
     // $user->phone = '31997467665';
     // $user->password = Hash::make('test123');
     // $user->save();
-    
+
     // $user1 = new User();
     // $user1->name = 'Guilhermino';
     // $user1->email = 'mail@mail.com';
@@ -88,7 +88,7 @@ Route::get('/', function () {
     // $teslinha->owner_id = 1;
     // $teslinha->size = 'small';
     // $teslinha->save();
-    
+
     // $zed = new Pet();
     // $zed->name = 'Zed';
     // $zed->type = 'cat';

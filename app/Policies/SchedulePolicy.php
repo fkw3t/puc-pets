@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Vet;
 use App\Models\User;
+use App\Models\Schedule;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SchedulePolicy
@@ -17,5 +19,17 @@ class SchedulePolicy
     public function __construct()
     {
         //
+    }
+
+    public function update(User $user, Schedule $target): bool
+    {
+        $vet = Vet::where('user_id', $user->id);
+        return $vet->id === $target->id;
+    }
+
+    public function destroy(User $user, Schedule $target): bool
+    {
+        $vet = Vet::where('user_id', $user->id);
+        return $vet->id === $target->id;
     }
 }
