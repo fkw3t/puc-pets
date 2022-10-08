@@ -132,6 +132,28 @@ final class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"users"},
+     *  path="/api/auth/user/document/{document}",
+     *  operationId="listUserByDocument",
+     *  summary="list user by document",
+     *  @OA\Parameter(
+     *         description="user document",
+     *         in="path",
+     *         name="document",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function showByDocument(string $document): JsonResource
     {
         $user = User::firstWhere('document_id', $document);
@@ -143,6 +165,54 @@ final class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * @OA\Put(
+     *  tags={"users"},
+     *  path="/api/auth/user/{id}",
+     *  operationId="update account",
+     *  summary="update account data",
+     *  @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="phone",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string"
+     *                 ),
+     *                 example={
+     *                          "name": "Roberto Augusto",
+     *                          "phone": "(31) 91234-5678",
+     *                          "email": "mail@mail.com",
+     *                          "password": "1234678"
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Successfully updated",
+     *  ),
+     * security={{ "apiAuth": {} }}
+     * )
+     */
     public function update(UpdateUserRequest $request, int $id): JsonResponse
     {
         $user = User::find($id);
@@ -169,6 +239,28 @@ final class UserController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Delete(
+     *  tags={"users"},
+     *  path="/api/auth/user/{id}",
+     *  operationId="delete account",
+     *  summary="delete your account",
+     *  @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Successfully deleted",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function destroy(Request $request, int $id): JsonResponse
     {
         $user = User::find($id);
@@ -190,6 +282,28 @@ final class UserController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"users"},
+     *  path="/api/auth/user/{id}/pet",
+     *  operationId="listPetsByUser",
+     *  summary="list all pets of user",
+     *  @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function pets(int $id): JsonResponse
     {
         $user = User::find($id);

@@ -214,6 +214,367 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "update account data",
+                "operationId": "update account",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Roberto Augusto",
+                                    "phone": "(31) 91234-5678",
+                                    "email": "mail@mail.com",
+                                    "password": "1234678"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "delete your account",
+                "operationId": "delete account",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/user/document/{document}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "list user by document",
+                "operationId": "listUserByDocument",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "description": "user document",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/user/{id}/pet": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "list all pets of user",
+                "operationId": "listPetsByUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/vet": {
+            "get": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "list all vets in system",
+                "operationId": "listVets",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "register user as vet",
+                "operationId": "createVet",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer"
+                                    },
+                                    "crm": {
+                                        "type": "string"
+                                    },
+                                    "specification": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "user_id": 1,
+                                    "crm": "031237",
+                                    "specification": "Animal food"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/vet/{id}": {
+            "get": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "list vet by id",
+                "operationId": "listVetById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "update vet account details",
+                "operationId": "updateVet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "crm": {
+                                        "type": "string"
+                                    },
+                                    "specialization": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "crm": "0123732",
+                                    "specialization": "Animal food"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "remove user as vet account",
+                "operationId": "removeVet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/vet/document/{document}": {
+            "get": {
+                "tags": [
+                    "vets"
+                ],
+                "summary": "list vet by CRM",
+                "operationId": "listUserByCRM",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "description": "vet CRM",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         }
     },
