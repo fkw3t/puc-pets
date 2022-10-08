@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(App::enviroment() === "production") {
+        if(App::environment() === "production") {
             URL::forceScheme("https");
         }
 
