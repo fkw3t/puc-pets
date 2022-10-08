@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use DomainException;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Schedule\ScheduleResource;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
+use App\Http\Requests\Schedule\AssignScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
 
 class ScheduleController extends Controller
@@ -48,6 +50,31 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    public function apply(AssignScheduleRequest $request, int $id): JsonResponse
+    {
+        $schedule = Schedule::find($id);
+
+        if (!$schedule) {
+            throw new DomainException('Content not found', 204);
+        }
+
+        if( in_array($schedule->status, ['pending', 'confirmed', 'canceled']) ) {
+            throw new DomainException('This schedule cannot be assigned as its status is no longer open', 400);
+        }
+
+        // add to service
+        $user = User::find($request->get('client_id'));
+
+        if( !$user->pets ) {
+            throw new DomainException('This user cannot be assigned as it doesn\'t have a pet registered', 400);
+        }
+
+        $schedule->client_id = $user->id;
+        return response()->json([
+            'message' => 'Schedule successfuly assigned'
+        ], 200);
+    }
+
     public function show(int $id): JsonResource|JsonResponse
     {
         $schedule = Schedule::find($id);
@@ -63,7 +90,7 @@ class ScheduleController extends Controller
     {
         $data = $request->only('vet_id', 'date');
         $data['status'] = 'open';
-        
+
         Schedule::create($data);
 
         return response()->json([
