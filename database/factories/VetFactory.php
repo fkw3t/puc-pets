@@ -23,12 +23,10 @@ class VetFactory extends Factory
             'Reptile amphibian'
         ];
 
-        $rnd = array_rand($specialization, 1);
-
         return [
             'user_id' => User::factory(),
             'crm' => '012345',
-            'specialization' => 'asd'
+            'specialization' => $specialization[array_rand($specialization, 1)]
         ];
     }
 }

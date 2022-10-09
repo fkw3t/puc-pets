@@ -33,7 +33,7 @@ class AuthController extends Controller
      *                     property="password",
      *                     type="string"
      *                 ),
-     *                 example={"email": "eliabner.marques@mail.com", "password": "test123"}
+     *                 example={"email": "test@mail.com", "password": "test123"}
      *             )
      *         ),
      *         @OA\MediaType(

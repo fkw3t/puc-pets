@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -20,12 +21,12 @@ class UserFactory extends Factory
         $faker = \Faker\Factory::create('pt_BR');
 
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName() . ' ' . fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'document_id' => $faker->cpf,
+            'document_id' => $cpf = str_replace(['-', '.'], '', $faker->cpf),
             'phone' => fake()->phoneNumber(),
             'email_verified_at' => now(),
-            'password' => 'test123', // password
+            'password' => Hash::make('test123'), // password
             'remember_token' => Str::random(10),
         ];
     }

@@ -17,20 +17,24 @@ class PetFactory extends Factory
      */
     public function definition()
     {
+        $size = [
+            'small',
+            'medium',
+            'large'
+        ];
+
+        $type = [
+            'dog',
+            'cat',
+            'bird',
+            'rat'
+        ];
+
         return [
             'name' => fake()->firstName(),
             'owner_id' => User::factory(),
-            'size' => array_rand([
-                'small',
-                'medium',
-                'large'
-            ], 1)[0],
-            'type' => array_rand([
-                'dog',
-                'cat',
-                'bird',
-                'rat'
-            ], 1)[0]
+            'size' => $size[array_rand($size, 1)],
+            'type' => $type[array_rand($type, 1)]
         ];
     }
 }
