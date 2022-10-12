@@ -50,7 +50,7 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
-    public function apply(AssignScheduleRequest $request, int $id): JsonResponse
+    public function assign(AssignScheduleRequest $request, int $id): JsonResponse
     {
         $schedule = Schedule::find($id);
 
@@ -59,14 +59,20 @@ class ScheduleController extends Controller
         }
 
         if( in_array($schedule->status, ['pending', 'confirmed', 'canceled']) ) {
+            return response()->json([
+                'message' =>  'This schedule cannot be assigned as its status is no longer open'
+            ], 400);
             throw new DomainException('This schedule cannot be assigned as its status is no longer open', 400);
         }
 
-        // add to service
+        // add to service and catch exceptions
         $user = User::find($request->get('client_id'));
 
-        if( !$user->pets ) {
-            throw new DomainException('This user cannot be assigned as it doesn\'t have a pet registered', 400);
+        if( !$user->pets()->exists() ) {
+            return response()->json([
+                'message' =>  'User cannot schedule service without having a pet registered'
+            ], 400);
+            // throw new DomainException('This user cannot be assigned as it doesn\'t have a pet registered', 400);
         }
 
         $schedule->client_id = $user->id;

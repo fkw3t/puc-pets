@@ -12,6 +12,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VetController;
 
 /*
@@ -46,6 +47,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
         Route::apiResource('pet', PetController::class);
 
+        Route::apiResource('schedule', ScheduleController::class);
+        Route::post('schedule/{id}/assign', [ScheduleController::class, 'assign']);
     });
 
 });
