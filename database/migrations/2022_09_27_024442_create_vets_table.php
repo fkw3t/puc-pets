@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')
                 ->constrained();
-            $table->string('crm');
+            $table->string('crm')->unique();
             $table->string('specialization');
             $table->timestamps();
         });

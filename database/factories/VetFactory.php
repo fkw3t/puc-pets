@@ -25,7 +25,7 @@ class VetFactory extends Factory
 
         return [
             'user_id' => User::factory(),
-            'crm' => '012345',
+            'crm' => $this->faker->numberBetween(11111, 99999),
             'specialization' => $specialization[array_rand($specialization, 1)]
         ];
     }
