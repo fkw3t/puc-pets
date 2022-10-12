@@ -44,11 +44,6 @@ class StorePetRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        // 
-    }
-
     protected function failedValidation(Validator $validator)
     {
         $response = new Response(['error' => $validator->errors()->all()], 422);

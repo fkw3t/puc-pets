@@ -28,13 +28,8 @@ class AssignScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:vets,id', 'numeric'],
+            'client_id' => ['required', 'exists:users,id', 'numeric'],
         ];
-    }
-
-    public function messages()
-    {
-        //
     }
 
     protected function failedValidation(Validator $validator)
