@@ -15,6 +15,18 @@ use App\Http\Requests\Schedule\UpdateScheduleRequest;
 
 class ScheduleController extends Controller
 {
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule",
+     *  operationId="listSchedules",
+     *  summary="list all schedules status",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function index(): JsonResource
     {
         $schedules = Schedule::all();
@@ -22,6 +34,18 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/open",
+     *  operationId="listOpenSchedules",
+     *  summary="list all open schedules",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function open(): JsonResource
     {
         $schedules = Schedule::where('status', 'open');
@@ -29,6 +53,18 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/pending",
+     *  operationId="listPendingSchedules",
+     *  summary="list all pending schedules",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function pending(): JsonResource
     {
         $schedules = Schedule::where('status', 'pending');
@@ -36,6 +72,18 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/confirmed",
+     *  operationId="listConfirmedSchedules",
+     *  summary="list all confirmed schedules",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function confirmed(): JsonResource
     {
         $schedules = Schedule::where('status', 'confirmed');
@@ -43,6 +91,18 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/canceled",
+     *  operationId="listCanceledSchedules",
+     *  summary="list all canceled schedules",
+     *  @OA\Response(response="200",
+     *    description="Validation Response",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function canceled(): JsonResource
     {
         $schedules = Schedule::where('status', 'canceled');
@@ -50,6 +110,45 @@ class ScheduleController extends Controller
         return ScheduleResource::collection($schedules);
     }
 
+    /**
+     * @OA\Post(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/{id}/assign",
+     *  operationId="assignSchedule",
+     *  summary="client assign to a schedule",
+     *  @OA\Parameter(
+     *         description="schedule id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="client_id",
+     *                     type="integer"
+     *                 ),
+     *                 example={
+     *                          "client_id": 0123732
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Successfully updated",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  @OA\Response(response="400",
+     *    description="This schedule cannot be assigned as its status is no longer open",
+     *  ),
+     * security={{ "apiAuth": {} }}
+     * )
+     */
     public function assign(AssignScheduleRequest $request, int $id): JsonResponse
     {
         $schedule = Schedule::find($id);
@@ -76,11 +175,36 @@ class ScheduleController extends Controller
         }
 
         $schedule->client_id = $user->id;
+        $schedule->status = 'pending';
         return response()->json([
             'message' => 'Schedule successfuly assigned'
         ], 200);
     }
+    
+    // TODO: confirm, cancel
 
+    /**
+     * @OA\Get(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/{id}",
+     *  operationId="searchSchedule",
+     *  summary="search schedule by id",
+     *  @OA\Parameter(
+     *         description="schedule id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function show(int $id): JsonResource|JsonResponse
     {
         $schedule = Schedule::find($id);
@@ -92,6 +216,37 @@ class ScheduleController extends Controller
         return new ScheduleResource($schedule);
     }
 
+    /**
+     * @OA\Post(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule",
+     *  operationId="createSchedule",
+     *  summary="create schedule",
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="vet_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="date",
+     *                     type="string"
+     *                 ),
+     *                 example={
+     *                          "vet_id": 1,
+     *                          "date": "01-01-2025 12:00"
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="201",
+     *    description="Success",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function store(StoreScheduleRequest $request): JsonResponse
     {
         $data = $request->only('vet_id', 'date');
@@ -104,6 +259,39 @@ class ScheduleController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Put(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/{id}",
+     *  operationId="updateSchedule",
+     *  summary="update schedule",
+     *  @OA\Parameter(
+     *         description="schedule id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *  @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="date",
+     *                     type="string"
+     *                 ),
+     *                 example={
+     *                          "date": "01-01-2025 15:00",
+     *                  }
+     *             )
+     *         )
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Successfully updated",
+     *  ),
+     * security={{ "apiAuth": {} }}
+     * )
+     */
     public function update(UpdateScheduleRequest $request, int $id): JsonResponse
     {
         $schedule = Schedule::find($id);
@@ -129,6 +317,31 @@ class ScheduleController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Delete(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/{id}",
+     *  operationId="removeSchedule",
+     *  summary="remove schedule",
+     *  @OA\Parameter(
+     *         description="schedule id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Successfully deleted",
+     *  ),
+     *  @OA\Response(response="204",
+     *    description="Content not found",
+     *  ),
+     *  @OA\Response(response="400",
+     *    description="This schedule cannot be deleted as its status is no longer open",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
     public function destroy(Request $request, int $id): JsonResponse
     {
         $schedule = Schedule::find($id);

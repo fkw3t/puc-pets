@@ -48,6 +48,10 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::apiResource('pet', PetController::class);
 
         Route::apiResource('schedule', ScheduleController::class);
+        Route::get('schedule/open', [ScheduleController::class, 'open']);
+        Route::get('schedule/pending', [ScheduleController::class, 'pending']);
+        Route::get('schedule/confirmed', [ScheduleController::class, 'confirmed']);
+        Route::get('schedule/canceled', [ScheduleController::class, 'canceled']);
         Route::post('schedule/{id}/assign', [ScheduleController::class, 'assign']);
     });
 

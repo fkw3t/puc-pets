@@ -117,6 +117,304 @@
                 ]
             }
         },
+        "/api/auth/schedule": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "list all schedules status",
+                "operationId": "listSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "create schedule",
+                "operationId": "createSchedule",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "vet_id": {
+                                        "type": "integer"
+                                    },
+                                    "date": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "vet_id": 1,
+                                    "date": "01-01-2025 12:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/open": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "list all open schedules",
+                "operationId": "listOpenSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/pending": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "list all pending schedules",
+                "operationId": "listPendingSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/confirmed": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "list all confirmed schedules",
+                "operationId": "listConfirmedSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/canceled": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "list all canceled schedules",
+                "operationId": "listCanceledSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/{id}/assign": {
+            "post": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "client assign to a schedule",
+                "operationId": "assignSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "schedule id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "client_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "client_id": 123732
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    },
+                    "400": {
+                        "description": "This schedule cannot be assigned as its status is no longer open"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/schedule/{id}": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "search schedule by id",
+                "operationId": "searchSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "schedule id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "update schedule",
+                "operationId": "updateSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "schedule id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "date": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "date": "01-01-2025 15:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "remove schedule",
+                "operationId": "removeSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "schedule id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    },
+                    "400": {
+                        "description": "This schedule cannot be deleted as its status is no longer open"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/user": {
             "get": {
                 "tags": [
