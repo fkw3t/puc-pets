@@ -1,6 +1,7 @@
 name: main
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -8,15 +9,16 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
-        php-version: ['>=8.1', '8.1', '8.0', '7.4']
+        php_version: ['>=8.1', '8.1', '8.0', '7.4']
+        OS: ['ubuntu-latest', 'windows-latest']
 
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: ${{ php-version }}
+        php-version: ${{ matrix.php_version }}
     - uses: actions/checkout@v3
       
     - name: validate composer.json and composer.lock
