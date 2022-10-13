@@ -3,10 +3,10 @@ name: Laravel
 on:
   schedule:
     - cron: '*/5 * * * *'
-#   push:
-#     branches: [ "workflows-test" ]
-#   pull_request:
-#     branches: [ "workflows-test" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   laravel-tests:
