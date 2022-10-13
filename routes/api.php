@@ -26,6 +26,8 @@ use App\Http\Controllers\VetController;
 |
 */
 
+# test
+
 Route::group(['prefix' => 'auth'], function ($router) {
 
     Route::post('register', [UserController::class, 'store']);
