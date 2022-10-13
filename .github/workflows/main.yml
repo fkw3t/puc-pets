@@ -42,6 +42,7 @@ jobs:
       
     - name: directory permissions
       run: chmod -R 777 storage bootstrap/cache
+      
     - name: create database
       run: |
         mkdir -p database
@@ -51,4 +52,4 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      run: vendor/bin/phpunit --no-coverage
