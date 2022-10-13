@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build and test:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,18 +42,6 @@ jobs:
       
     - name: directory permissions
       run: chmod -R 777 storage bootstrap/cache
-      
-  test:
-    needs: build
-    
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.1'
-    - uses: actions/checkout@v3 
-      
     - name: create database
       run: |
         mkdir -p database
