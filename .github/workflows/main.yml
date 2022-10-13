@@ -44,6 +44,8 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
       
   test:
+    needs: build
+    
     runs-on: ubuntu-latest
 
     steps:
