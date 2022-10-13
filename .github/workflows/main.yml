@@ -9,11 +9,14 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['>=8.1', '8.1', '8.0', '7.4']
 
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.1'
+        php-version: ${{ php-version }}
     - uses: actions/checkout@v3
       
     - name: validate composer.json and composer.lock
