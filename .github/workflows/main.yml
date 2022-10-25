@@ -61,19 +61,19 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit --no-coverage
       
+    - name: download a build artifact
+      uses: actions/download-artifact@v3.0.1
+      with:
+        name: laravel project
+        path: "./"
+      
 
   deploy:
     needs: [build-test] 
     
     runs-on: 'ubuntu-latest'
     
-    steps:
-      - name: download a build artifact
-        uses: actions/download-artifact@v3.0.1
-        with:
-          name: laravel project
-          path: "./"
-    
+    steps:    
       - name: checkout repository
         uses: actions/checkout@master
         
