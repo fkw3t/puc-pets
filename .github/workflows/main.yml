@@ -79,7 +79,7 @@ jobs:
       - name: deploy
         # You may pin to the exact commit or the version.
         # uses: ngocquyhoang/laravel-deploy@44ec6bf06ce9f68f68f614033fb57a8851f60b53
-        uses: ngocquyhoang/laravel-deploy@c829ef927c22b4f19a0ab3dbb77849f1282bf0b9
+        uses: ngocquyhoang/laravel-deploy@44ec6bf06ce9f68f68f614033fb57a8851f60b53
         with:
           user: ${{ secrets.AWS_USER }}
           host: ${{ secrets.AWS_HOST }}
