@@ -61,11 +61,11 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit --no-coverage
       
-    - name: download a build artifact
-      uses: actions/download-artifact@v3.0.1
+    - name: upload a build artifact
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: laravel project
-        path: app
+        path: './'
       
 
   deploy:
