@@ -65,7 +65,7 @@ jobs:
       uses: actions/download-artifact@v3.0.1
       with:
         name: laravel project
-        path: "app/"
+        path: app
       
 
   deploy:
