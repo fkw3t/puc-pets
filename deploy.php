@@ -10,8 +10,9 @@ require 'contrib/rsync.php';
 // Config
 ///////////////////////////////////
 
+$repo = 'https://fkw3t:' . env('GITHUB_REPO_TOKEN') .  '@github.com/fkw3t/puc-pets.git';
 set('application', 'PUC Pets');
-set('repository', 'https://fkw3t:' . env('GITHUB_REPO_TOKEN') .  '@github.com/fkw3t/puc-pets.git'); // Git Repository
+set('repository', $repo); // Git Repository
 set('ssh_multiplexing', true);  // Speed up deployment
 //set('default_timeout', 1000);
 
