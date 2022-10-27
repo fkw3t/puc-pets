@@ -14,7 +14,7 @@ $repo = 'https://fkw3t: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@github.com/fkw3t
 set('application', 'PUC Pets');
 set('repository', $repo); // Git Repository
 set('ssh_multiplexing', true);  // Speed up deployment
-//set('default_timeout', 1000);
+set('default_timeout', 1220);
 
 set('rsync_src', function () {
     return __DIR__; // If your project isn't in the root, you'll need to change this.
