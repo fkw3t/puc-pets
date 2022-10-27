@@ -48,11 +48,11 @@ jobs:
         mkdir -p database
         touch database/database.sqlite
         
-    - name: execute tests (unit and feature tests) with phpunit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit --no-coverage
+#     - name: execute tests (unit and feature tests) with phpunit
+#       env:
+#         DB_CONNECTION: sqlite
+#         DB_DATABASE: database/database.sqlite
+#       run: vendor/bin/phpunit --no-coverage
       
     - name: upload a build artifact
       uses: actions/upload-artifact@v3.1.1
