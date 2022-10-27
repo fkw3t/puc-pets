@@ -43,6 +43,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
+        script: touch works.txt
 # #     needs: [ build-assets ]
 #     if: github.ref == 'refs/heads/main'
 #     steps:
