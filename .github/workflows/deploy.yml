@@ -28,13 +28,13 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy to Staging server
-      uses: easingthemes/ssh-deploy@main
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        REMOTE_HOST: 15.229.45.202
-        REMOTE_USER: ubuntu
-        TARGET: /var/www
+#     - name: Deploy to Staging server
+#       uses: easingthemes/ssh-deploy@main
+#       env:
+#         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#         REMOTE_HOST: 15.229.45.202
+#         REMOTE_USER: ubuntu
+#         TARGET: /var/www
         
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
