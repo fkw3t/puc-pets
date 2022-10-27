@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: [ "alternative-wokflow" ]
+    branches: ["*"]
 jobs:
 #   build-assets:
 #     name: build assets
