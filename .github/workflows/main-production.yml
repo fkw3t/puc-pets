@@ -1,3 +1,94 @@
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: checkout repository
+#       uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+#       with:
+#         php-version: 8.1
+        
+#     - uses: actions/checkout@v3
+      
+#     - name: validate composer.json and composer.lock
+#       run: composer validate --strict
+
+#     - name: cache composer packages
+#       id: composer-cache
+#       uses: actions/cache@v3
+#       with:
+#         path: vendor
+#         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-php-
+    
+#     - name: install dependencies
+#       run: composer install --optimize-autoloader --no-dev
+      
+#     - name: copy .env
+#       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      
+#     - name: generate key
+#       run: php artisan key:generate
+      
+#     - name: generate JWT key
+#       run: php artisan jwt:secret
+      
+#     - name: directory permissions
+#       run: chmod -R 777 storage bootstrap/cache
+      
+#     - name: create database
+#       run: |
+#         mkdir -p database
+#         touch database/database.sqlite
+        
+# #     - name: execute tests (unit and feature tests) with phpunit
+# #       env:
+# #         DB_CONNECTION: sqlite
+# #         DB_DATABASE: database/database.sqlite
+# #       run: vendor/bin/phpunit --no-coverage
+      
+#     - name: upload a build artifact
+#       uses: actions/upload-artifact@v3.1.1
+#       with:
+#         name: application
+#         path: ./
+      
+
+#   deploy:
+#     runs-on: ubuntu-latest  
+#     needs: [ test ]
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: fetch assets artifacts
+#         uses: actions/download-artifact@v1
+#         with:
+#           name: application
+
+#       - name: deploy
+#         uses: easingthemes/ssh-deploy@main
+#         env:
+#           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+#           REMOTE_USER: ${{ secrets.REMOTE_USER }}
+#           TARGET: /var/www/puc-pets
+        
+#       # - name: executing remote ssh commands using key
+#       # uses: appleboy/ssh-action@master
+#       # with:
+#       #   host: ${{ secrets.REMOTE_HOST }}
+#       #   username: ${{ secrets.REMOTE_USER }}
+#       #   key: ${{ secrets.SSH_PRIVATE_KEY }}
+#       #   port: 22
+#       #   script: |
+#       #     touch /var/www/works.txt
+
 on:
   workflow_dispatch:
   push:
@@ -6,85 +97,48 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout repository
-      uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: 8.1
-        
-    - uses: actions/checkout@v3
-      
-    - name: validate composer.json and composer.lock
-      run: composer validate --strict
+#   build-assets:
+#     name: build assets
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main'
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: npm build
+#         run: |
+#           npm install
+#           npm run prod
+#       - name: save as artifact
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: assets
+#           path: public
+#           retention-days: 3
 
-    - name: cache composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    
-    - name: install dependencies
-      run: composer install --optimize-autoloader --no-dev
-      
-    - name: copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      
-    - name: generate key
-      run: php artisan key:generate
-      
-    - name: generate JWT key
-      run: php artisan jwt:secret
-      
-    - name: directory permissions
-      run: chmod -R 777 storage bootstrap/cache
-      
-    - name: create database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-        
-#     - name: execute tests (unit and feature tests) with phpunit
-#       env:
-#         DB_CONNECTION: sqlite
-#         DB_DATABASE: database/database.sqlite
-#       run: vendor/bin/phpunit --no-coverage
-      
-    - name: upload a build artifact
-      uses: actions/upload-artifact@v3.1.1
-      with:
-        name: application
-        path: ./
-      
-
-  deploy:
+  deploy-production:
+    name: deploy
     runs-on: ubuntu-latest  
-    needs: [ test ]
+#     needs: [ build-assets ]
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v1
-      - name: fetch assets artifacts
-        uses: actions/download-artifact@v1
+#       - name: fetch assets artifacts
+#         uses: actions/download-artifact@v1
+#         with:
+#           name: assets
+#           path: public
+      - name: setup PHP
+        uses: shivammathur/setup-php@master
         with:
-          name: application
-
-      - name: deploy
-        uses: easingthemes/ssh-deploy@main
+          php-version: '8.1'
+          extension-csv: mbstring, bcmath
+      - name: composer install
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: setup deployer
+        uses: atymic/deployer-php-action@master
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: deploy to production
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: /var/www/puc-pets
-        
-      # - name: executing remote ssh commands using key
-      # uses: appleboy/ssh-action@master
-      # with:
-      #   host: ${{ secrets.REMOTE_HOST }}
-      #   username: ${{ secrets.REMOTE_USER }}
-      #   key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #   port: 22
-      #   script: |
-      #     touch /var/www/works.txt
+          DOT_ENV: ${{ secrets.DOT_ENV_PRODUCTION }}
+        run: php vendor/bin/dep deploy prod --branch="main" -vv
