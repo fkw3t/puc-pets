@@ -1,11 +1,5 @@
 on:
-  # TODO: change to trigger only when pushes/pr
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
 jobs:
 #   build-assets:
 #     name: build assets
