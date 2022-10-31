@@ -27,6 +27,7 @@ return new class extends Migration
                 ->on('users');
             $table->foreignId('vet_id')
                 ->constrained();
+            $table->string('confirmation_token')->nullable();
             $table->dateTime('date');
             $table->timestamps();
         });

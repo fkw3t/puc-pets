@@ -15,7 +15,12 @@ class Schedule extends Model
         'vet_id',
         'client_id',
         'date',
-        'status'
+        'status',
+        'confirmation_token'
+    ];
+
+    protected $hiden = [
+        'confirmation_token'
     ];
 
     public function client(): HasOne

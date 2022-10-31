@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Models\User;
 use DomainException;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Schedule\ScheduleResource;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
@@ -161,10 +163,10 @@ class ScheduleController extends Controller
             return response()->json([
                 'message' =>  'This schedule cannot be assigned as its status is no longer open'
             ], 400);
-            throw new DomainException('This schedule cannot be assigned as its status is no longer open', 400);
+            // throw new DomainException('This schedule cannot be assigned as its status is no longer open', 400);
         }
 
-        // add to service and catch exceptions
+        // add to service and throw exceptions
         $user = User::find($request->get('client_id'));
 
         if( !$user->pets()->exists() ) {
@@ -174,14 +176,99 @@ class ScheduleController extends Controller
             // throw new DomainException('This user cannot be assigned as it doesn\'t have a pet registered', 400);
         }
 
+        $confirmation_token = Hash::make(new DateTime());
+
         $schedule->client_id = $user->id;
         $schedule->status = 'pending';
+        $schedule->confirmation_token = $confirmation_token;
+        $schedule->save();
+
+        # todo: sendmail with confirmation token
+
         return response()->json([
-            'message' => 'Schedule successfuly assigned'
+            'message' => 'Schedule successfully assigned'
         ], 200);
     }
     
-    // TODO: confirm, cancel
+    public function confirm(int $id, string $hash): JsonResponse
+    {
+        $schedule = Schedule::find($id);
+
+        if( !$schedule ){
+            throw new DomainException('Content not found', 204);
+        }
+
+        if( !in_array($schedule->status, ['pending']) ) {
+            return response()->json([
+                'message' =>  'This schedule cannot be confirmed as its status is no longer pending'
+            ], 400);
+            // throw new DomainException('This schedule cannot be confirmed as its status is no longer pending', 400);
+        }
+
+        if( $schedule->confirmation_token != $hash){
+            return response()->json([
+                'message' =>  'Invalid confirmation token'
+            ], 400);
+            throw new DomainException('Invalid confirmation token', 400);
+        }
+
+        $schedule->status = 'confirmed';
+        $schedule->save();
+
+        # todo: send information mail to vet and user ;
+
+        return response()->json([], 200);
+    }
+
+    /**
+     * @OA\Post(
+     *  tags={"schedules"},
+     *  path="/api/auth/schedule/{id}/cancel",
+     *  operationId="cancelSchedule",
+     *  summary="cancel schedule",
+     *  @OA\Parameter(
+     *         description="schedule id",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *  @OA\Response(response="200",
+     *    description="Success",
+     *  ),
+     *  security={{ "apiAuth": {} }}
+     * )
+     */
+    public function cancel(Request $request, int $id): JsonResponse
+    {
+        $schedule = Schedule::find($id);
+
+        if( !$schedule ){
+            throw new DomainException('Content not found', 204);
+        }
+
+        if( !in_array($schedule->status, ['pending', 'confirmed']) ) {
+            return response()->json([
+                'message' =>  'This schedule cannot be canceled as its status is no longer pending or confirmed'
+            ], 400);
+            // throw new DomainException('This schedule cannot be canceled as its status is no longer pending or confirmed', 400);
+        }
+        
+        if ($request->user()->cannot('cancel', $schedule)) {
+            return response()->json([
+                'message' => 'You can only cancel your own schedules'
+            ], 403);
+        }
+
+        $schedule->status = 'canceled';
+        $schedule->save();
+
+        // # todo: send information mail to vet and user ;
+
+        return response()->json([
+            'message' => 'Schedule successfully canceled'
+        ], 200);
+    }
 
     /**
      * @OA\Get(

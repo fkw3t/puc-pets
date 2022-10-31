@@ -31,6 +31,8 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [UserController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
 
+    Route::post('schedule/{id}/confirm/{hash}', [ScheduleController::class, 'confirm']);
+
 
     Route::group(['middleware' => 'jwt.auth'], function () {
 
@@ -53,6 +55,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::get('schedule/confirmed', [ScheduleController::class, 'confirmed']);
         Route::get('schedule/canceled', [ScheduleController::class, 'canceled']);
         Route::post('schedule/{id}/assign', [ScheduleController::class, 'assign']);
+        Route::post('schedule/{id}/cancel', [ScheduleController::class, 'cancel']);
     });
 
 });
