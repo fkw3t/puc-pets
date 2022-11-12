@@ -45,7 +45,7 @@ task('deploy:secrets', function () {
 ///////////////////////////////////
 
 host('prod') // Name of the server
-->setHostname('15.229.45.202') // Hostname or IP address
+->setHostname('18.228.61.32') // Hostname or IP address
 ->set('remote_user', 'ubuntu') // SSH user
 ->set('branch', 'main') // Git branch
 ->set('deploy_path', '/var/www/puc-pets'); // Deploy path
