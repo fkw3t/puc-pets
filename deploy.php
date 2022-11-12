@@ -10,6 +10,7 @@ require 'contrib/rsync.php';
 // Config
 ///////////////////////////////////
 
+# todo: set token at .env
 $repo = 'https://fkw3t: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@github.com/fkw3t/puc-pets.git';
 set('application', 'PUC Pets');
 set('repository', $repo); // Git Repository

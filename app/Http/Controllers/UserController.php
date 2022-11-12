@@ -78,7 +78,7 @@ final class UserController extends Controller
      *                          "document_id": "123456789012",
      *                          "email": "mail@mail.com",
      *                          "phone": "(31) 91234-5678",
-     *                          "password": 1234678
+     *                          "password": "test123"
      *                  }
      *             )
      *         )

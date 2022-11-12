@@ -34,12 +34,7 @@ class StorePetRequest extends FormRequest
                 'medium',
                 'large'
             ])],
-            'type' => ['required', 'string', Rule::in([
-                'dog',
-                'cat',
-                'bird',
-                'rat'
-            ])],
+            'birth_date' => ['required', 'date'],
             'owner_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
