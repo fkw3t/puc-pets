@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Pet;
 use App\Models\Vet;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +20,8 @@ class ScheduleFactory extends Factory
     public function definition()
     {
         return [
+            'client_id' => User::factory()
+                ->has(Pet::factory()),
             'vet_id' => Vet::factory(),
             'status' => 'open',
             'date' => $this->faker->dateTimeBetween('+1 days', '+1 month')

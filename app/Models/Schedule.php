@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Schedule extends Model
 {
@@ -15,13 +17,15 @@ class Schedule extends Model
         'vet_id',
         'client_id',
         'date',
-        'status',
-        'confirmation_token'
+        'status'
     ];
 
-    protected $hiden = [
-        'confirmation_token'
-    ];
+    protected function date(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value->format('d-m-Y H:i')
+        );
+    }
 
     public function client(): HasOne
     {

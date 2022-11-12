@@ -31,8 +31,10 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [UserController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
 
-    Route::post('schedule/{id}/confirm/{hash}', [ScheduleController::class, 'confirm']);
-
+    // Route::get('schedule/{id}/confirm/{hash}', [ScheduleController::class, 'confirm']);
+    Route::get('schedule/{id}/confirm', [ScheduleController::class, 'confirm'])
+        ->name('schedule.confirm')
+        ->middleware('schedule.confirm');
 
     Route::group(['middleware' => 'jwt.auth'], function () {
 

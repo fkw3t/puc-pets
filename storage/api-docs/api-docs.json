@@ -117,6 +117,185 @@
                 ]
             }
         },
+        "/api/auth/pet": {
+            "get": {
+                "tags": [
+                    "pets"
+                ],
+                "summary": "list all pets in system",
+                "operationId": "listPets",
+                "responses": {
+                    "200": {
+                        "description": "Validation Response"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "pets"
+                ],
+                "summary": "register pet",
+                "operationId": "registerPet",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "size": {
+                                        "type": "string"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Qiyana",
+                                    "size": "small",
+                                    "birth_date": "2019-01-01"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/pet/{id}": {
+            "get": {
+                "tags": [
+                    "pets"
+                ],
+                "summary": "list pet by id",
+                "operationId": "listPetById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "pet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "pets"
+                ],
+                "summary": "update pet",
+                "operationId": "updatPet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "pet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "size": {
+                                        "type": "string"
+                                    },
+                                    "birth_date": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Bidu",
+                                    "size": "medium",
+                                    "birth_date": "2018-01-01"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "pets"
+                ],
+                "summary": "remove pet",
+                "operationId": "removePet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "pet id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted"
+                    },
+                    "204": {
+                        "description": "Content not found"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/schedule": {
             "get": {
                 "tags": [
@@ -303,6 +482,36 @@
                 ]
             }
         },
+        "/api/auth/schedule/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "cancel schedule",
+                "operationId": "cancelSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "schedule id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/schedule/{id}": {
             "get": {
                 "tags": [
@@ -468,7 +677,7 @@
                                     "document_id": "123456789012",
                                     "email": "mail@mail.com",
                                     "phone": "(31) 91234-5678",
-                                    "password": 1234678
+                                    "password": "test123"
                                 }
                             }
                         }
