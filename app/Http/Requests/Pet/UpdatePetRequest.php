@@ -30,7 +30,7 @@ class UpdatePetRequest extends FormRequest
         return [
             'name' => ['string', 'max:50'],
             'size' => ['string', Rule::in(['fisical', 'legal'])],
-            'type' => ['string', Rule::in(['dog', 'cat', 'bird', 'rat'])]
+            'birth_date' => ['date']
         ];
     }
 

@@ -23,18 +23,11 @@ class PetFactory extends Factory
             'large'
         ];
 
-        $type = [
-            'dog',
-            'cat',
-            'bird',
-            'rat'
-        ];
-
         return [
             'name' => fake()->firstName(),
             'owner_id' => User::factory(),
             'size' => $size[array_rand($size, 1)],
-            'type' => $type[array_rand($type, 1)]
+            'birth_date' => fake()->date('Y-m-d')
         ];
     }
 }

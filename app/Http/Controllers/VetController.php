@@ -53,13 +53,13 @@ class VetController extends Controller
      *                     type="string"
      *                 ),
      *                 @OA\Property(
-     *                     property="specification",
+     *                     property="specialization",
      *                     type="string"
      *                 ),
      *                 example={
      *                          "user_id": 1,
      *                          "crm": "031237",
-     *                          "specification": "Animal food"
+     *                          "specialization": "Animal food"
      *                  }
      *             )
      *         )

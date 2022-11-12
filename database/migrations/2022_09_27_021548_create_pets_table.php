@@ -21,12 +21,7 @@ return new class extends Migration
                 'medium',
                 'large'
             ]);
-            $table->enum('type', [
-                'dog',
-                'cat',
-                'bird',
-                'rat'
-            ]);
+            $table->date('birth_date');
             $table->unsignedBigInteger('owner_id');
             $table->foreign('owner_id')
                 ->references('id')
