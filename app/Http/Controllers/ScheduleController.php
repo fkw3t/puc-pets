@@ -269,7 +269,6 @@ class ScheduleController extends Controller
         $schedule->status = 'canceled';
         $schedule->save();
 
-        # todo: send information mail to vet and user ;
         Notification::send([
             $schedule->client,
             $schedule->vet
