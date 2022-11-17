@@ -27,7 +27,7 @@ class PetController extends Controller
     {
         $pets = Pet::all();
 
-        return new PetCollection($pets);
+        return PetResource::collection($pets);
     }
 
     /**
@@ -52,10 +52,15 @@ class PetController extends Controller
      *                     property="birth_date",
      *                     type="date"
      *                 ),
+     *                 @OA\Property(
+     *                     property="owner_id",
+     *                     type="integer"
+     *                 ),
      *                 example={
      *                          "name": "Qiyana",
      *                          "size": "small",
-     *                          "birth_date": "2019-01-01"
+     *                          "birth_date": "2019-01-01",
+     *                          "owner_id": 1,
      *                  }
      *             )
      *         )

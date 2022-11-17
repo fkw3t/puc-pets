@@ -20,8 +20,8 @@ class ScheduleResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status, 
             'date' => $this->date, 
-            'vet' => new VetResource($this->vet),
-            'client' => new UserResource($this->client)
+            'vet' => new VetResource($this->whenLoaded('vet')),
+            'client' => new UserResource($this->whenLoaded('client'))
         ];
     }
 }

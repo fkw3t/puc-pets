@@ -31,7 +31,7 @@ class VetController extends Controller
     {
         $vets = Vet::all();
 
-        return new VetCollection($vets);
+        return VetResource::collection($vets);
     }
 
     /**
