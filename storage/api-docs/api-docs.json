@@ -155,13 +155,17 @@
                                     "birth_date": {
                                         "type": "string",
                                         "format": "date"
+                                    },
+                                    "owner_id": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object",
                                 "example": {
                                     "name": "Qiyana",
                                     "size": "small",
-                                    "birth_date": "2019-01-01"
+                                    "birth_date": "2019-01-01",
+                                    "owner_id": 1
                                 }
                             }
                         }
@@ -912,7 +916,7 @@
                                     "crm": {
                                         "type": "string"
                                     },
-                                    "specification": {
+                                    "specialization": {
                                         "type": "string"
                                     }
                                 },
@@ -920,7 +924,7 @@
                                 "example": {
                                     "user_id": 1,
                                     "crm": "031237",
-                                    "specification": "Animal food"
+                                    "specialization": "Animal food"
                                 }
                             }
                         }

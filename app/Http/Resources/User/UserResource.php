@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'document' => $this->document_id,
             'email' => $this->email,
             'phone' => $this->phone,
-            'pets' => PetResource::collection($this->pets)
+            'pets' => PetResource::collection($this->whenLoaded('pets'))
         ];
     }
 }

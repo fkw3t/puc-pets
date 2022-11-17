@@ -19,7 +19,7 @@ class VetResource extends JsonResource
             'id' => $this->id,
             'crm' => $this->crm,
             'specialization' => $this->specialization,
-            'user' => new UserResource($this->details)
+            'user' => new UserResource($this->whenLoaded('details'))
         ];
     }
 }
