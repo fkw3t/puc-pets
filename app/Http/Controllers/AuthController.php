@@ -128,6 +128,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'user' => [
+                'id' => Auth::user()->id,
                 'name' => Auth::user()->name,
                 'email' => Auth::user()->email,
                 'document' => Auth::user()->document_id,

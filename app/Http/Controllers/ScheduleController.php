@@ -138,8 +138,13 @@ class ScheduleController extends Controller
      *                     property="client_id",
      *                     type="integer"
      *                 ),
+     *                 @OA\Property(
+     *                     property="pet_id",
+     *                     type="integer"
+     *                 ),
      *                 example={
-     *                          "client_id": 0123732
+     *                          "client_id": 12,
+     *                          "pet_id": 55,
      *                  }
      *             )
      *         )
@@ -347,6 +352,7 @@ class ScheduleController extends Controller
     {
         $data = $request->only('vet_id', 'date');
         $data['status'] = 'open';
+        $data['date'] = new Datetime($data['date']);
 
         Schedule::create($data);
 
@@ -400,13 +406,14 @@ class ScheduleController extends Controller
             throw new DomainException('This schedule cannot be updated as its status is no longer open', 400);
         }
 
-        if ($request->user()->cannot('update', $schedule)) {
-            return response()->json([
-                'message' => 'You can only update your own schedules'
-            ], 403);
-        }
+        // if ($request->user()->cannot('update', $schedule)) {
+        //     return response()->json([
+        //         'message' => 'You can only update your own schedules'
+        //     ], 403);
+        // }
 
-        $schedule->update($request->only('date'));
+        $date = new Datetime($request->only('date')['date']);
+        $schedule->update(['date' => $date]);
 
         return response()->json([
             'message' => 'Successfully updated'

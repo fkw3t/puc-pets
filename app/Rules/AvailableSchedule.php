@@ -27,7 +27,7 @@ class AvailableSchedule implements InvokableRule
         $schedule = Schedule::where([
             'vet_id' => $this->vetId,
             'date' => $value
-        ]);
+        ])->exists();
 
         if($schedule){
             $fail('There is already a schedule at this time for this professional');
