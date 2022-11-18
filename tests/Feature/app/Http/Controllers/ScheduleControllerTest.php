@@ -21,29 +21,30 @@ class ScheduleControllerTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_user_without_pet_couldnt_schedule_service(): void
-    {
-        // arrange
-        $client = User::factory()->create();
-        $token = 'Bearer ' . auth()->login($client);
-        $vet = Vet::factory()->create();
-        $schedule = Schedule::factory()->create([
-                'vet_id' => $vet->id
-            ]);
-        $id = $schedule->id;
+    // public function test_user_without_pet_couldnt_schedule_service(): void
+    // {
+    //     // arrange
+    //     $client = User::factory()->create();
+    //     $token = 'Bearer ' . auth()->login($client);
+    //     $vet = Vet::factory()->create();
+    //     $schedule = Schedule::factory()->create([
+    //             'vet_id' => $vet->id
+    //         ]);
+    //     $id = $schedule->id;
 
-        // act
-        $response = $this->withHeader('Authorization', $token)
-            ->post("/api/auth/schedule/{$schedule->id}/assign", [
-            'client_id' => $client->id
-        ]);
+    //     // act
+    //     $response = $this->withHeader('Authorization', $token)
+    //         ->post("/api/auth/schedule/{$schedule->id}/assign", [
+    //         'client_id' => $client->id
+    //         'client_id' => $client->id
+    //     ]);
 
-        // assertions
-        $response->assertStatus(400)
-            ->assertExactJson([
-                'message' => 'User cannot schedule service without having a pet registered'
-            ]);
-    }
+    //     // assertions
+    //     $response->assertStatus(400)
+    //         ->assertExactJson([
+    //             'message' => 'User cannot schedule service without having a pet registered'
+    //         ]);
+    // }
 
     public function test_schedule_can_only_be_assigned_when_its_open(): void
     {
@@ -61,7 +62,8 @@ class ScheduleControllerTest extends TestCase
         // act
         $response = $this->withHeader('Authorization', $token)
             ->post("/api/auth/schedule/{$schedule->id}/assign", [
-            'client_id' => $client->id
+            'client_id' => $client->id,
+            'pet_id' => $schedule->client->pets->first()->id,
         ]);
 
         // assertions
@@ -81,7 +83,8 @@ class ScheduleControllerTest extends TestCase
         // act
         $response = $this->withHeader('Authorization', $token)
             ->post("/api/auth/schedule/{$schedule->id}/assign", [
-            'client_id' => $schedule->client->id
+            'client_id' => $schedule->client->id,
+            'pet_id' => $schedule->client->pets->first()->id,
         ]);
 
         // assert
