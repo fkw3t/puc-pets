@@ -21,6 +21,10 @@ return new class extends Migration
                 'confirmed',
                 'canceled'
             ])->default('open');
+            $table->unsignedBigInteger('pet_id')->nullable();
+            $table->foreign('pet_id')
+                ->references('id')
+                ->on('pets');
             $table->unsignedBigInteger('client_id')->nullable();
             $table->foreign('client_id')
                 ->references('id')

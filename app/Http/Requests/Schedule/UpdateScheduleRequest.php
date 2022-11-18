@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Schedule;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\AvailableSchedule;
 use Illuminate\Http\Response;
+use App\Rules\AvailableSchedule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -32,7 +33,7 @@ class UpdateScheduleRequest extends FormRequest
                 'date',
                 'date_format:d-m-Y H:i',
                 'after:today',
-                new AvailableSchedule($this->request->get('vet_id'))
+                // new AvailableSchedule(Auth::user()->vet->id)
             ]
         ];
     }

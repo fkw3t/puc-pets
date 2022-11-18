@@ -27,6 +27,11 @@ class Schedule extends Model
         );
     }
 
+    public function pet(): BelongsTo
+    {
+        return $this->belongsTo(Pet::class);
+    }
+
     public function client(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'client_id');

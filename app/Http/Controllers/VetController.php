@@ -244,7 +244,7 @@ class VetController extends Controller
         //     ], 403);
         // }
 
-        Vet::destroy($vet);
+        Vet::destroy($id);
 
         return response()->json([
             'message' => 'Successfully deleted'

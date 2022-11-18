@@ -29,6 +29,7 @@ class AssignScheduleRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'exists:users,id', 'numeric'],
+            'pet_id' => ['required', 'exists:pets,id', 'numeric'],
         ];
     }
 
