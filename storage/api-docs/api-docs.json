@@ -458,11 +458,15 @@
                                 "properties": {
                                     "client_id": {
                                         "type": "integer"
+                                    },
+                                    "pet_id": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object",
                                 "example": {
-                                    "client_id": 123732
+                                    "client_id": 12,
+                                    "pet_id": 55
                                 }
                             }
                         }

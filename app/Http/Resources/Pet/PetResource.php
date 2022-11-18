@@ -18,7 +18,7 @@ class PetResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'type' => $this->type,
+            'birth_date' => $this->birth_date,
             'size' => $this->size,
             'owner' => new UserResource($this->whenLoaded('owner'))
         ];
