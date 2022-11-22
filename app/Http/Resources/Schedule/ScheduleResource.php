@@ -19,11 +19,11 @@ class ScheduleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status, 
-            'date' => $this->date, 
-            'vet' => new VetResource($this->whenLoaded('vet')),
-            'pet' => new PetResource($this->whenLoaded('pet')),
-            'client' => new UserResource($this->whenLoaded('client'))
+            'status' => $this->status,
+            'date' => $this->date,
+            'vet' => $this->vet,
+            'pet' => $this->pet,
+            'client' => $this->client
         ];
     }
 }

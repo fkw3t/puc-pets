@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('date');
+            $table->enum('service', [
+                'veterinary',
+                'aesthetic',
+            ]);
             $table->enum('status', [
-                'open',
                 'pending',
                 'confirmed',
-                'canceled'
-            ])->default('open');
+            ])->default('pending');
             $table->unsignedBigInteger('pet_id')->nullable();
             $table->foreign('pet_id')
                 ->references('id')
@@ -30,8 +33,8 @@ return new class extends Migration
                 ->references('id')
                 ->on('users');
             $table->foreignId('vet_id')
-                ->constrained();
-            $table->dateTime('date');
+                ->constrained()
+                ->nullable();
             $table->timestamps();
         });
     }

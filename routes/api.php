@@ -31,7 +31,6 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('register', [UserController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
 
-    // Route::get('schedule/{id}/confirm/{hash}', [ScheduleController::class, 'confirm']);
     Route::get('schedule/{id}/confirm', [ScheduleController::class, 'confirm'])
         ->name('schedule.confirm')
         ->middleware('schedule.confirm');
@@ -52,12 +51,6 @@ Route::group(['prefix' => 'auth'], function ($router) {
         Route::apiResource('pet', PetController::class);
 
         Route::apiResource('schedule', ScheduleController::class);
-        Route::get('schedule/open', [ScheduleController::class, 'open']);
-        Route::get('schedule/pending', [ScheduleController::class, 'pending']);
-        Route::get('schedule/confirmed', [ScheduleController::class, 'confirmed']);
-        Route::get('schedule/canceled', [ScheduleController::class, 'canceled']);
-        Route::post('schedule/{id}/assign', [ScheduleController::class, 'assign']);
-        Route::post('schedule/{id}/cancel', [ScheduleController::class, 'cancel']);
     });
 
 });

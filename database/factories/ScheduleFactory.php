@@ -19,11 +19,13 @@ class ScheduleFactory extends Factory
      */
     public function definition()
     {
+
         return [
-            'client_id' => User::factory()
+            'client_id' => $user = User::factory()
                 ->has(Pet::factory()),
+            'pet_id' => $user->pets->first(),
             'vet_id' => Vet::factory(),
-            'status' => 'open',
+            'service' => 'veterinary',
             'date' => $this->faker->dateTimeBetween('+1 days', '+1 month')
         ];
     }

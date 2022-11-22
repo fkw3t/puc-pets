@@ -44,249 +44,6 @@ class ScheduleController extends Controller
     /**
      * @OA\Get(
      *  tags={"schedules"},
-     *  path="/api/auth/schedule/open",
-     *  operationId="listOpenSchedules",
-     *  summary="list all open schedules",
-     *  @OA\Response(response="200",
-     *    description="Validation Response",
-     *  ),
-     *  security={{ "apiAuth": {} }}
-     * )
-     */
-    public function open(): JsonResource
-    {
-        $schedules = Schedule::where('status', 'open');
-
-        return ScheduleResource::collection($schedules);
-    }
-
-    /**
-     * @OA\Get(
-     *  tags={"schedules"},
-     *  path="/api/auth/schedule/pending",
-     *  operationId="listPendingSchedules",
-     *  summary="list all pending schedules",
-     *  @OA\Response(response="200",
-     *    description="Validation Response",
-     *  ),
-     *  security={{ "apiAuth": {} }}
-     * )
-     */
-    public function pending(): JsonResource
-    {
-        $schedules = Schedule::where('status', 'pending');
-
-        return ScheduleResource::collection($schedules);
-    }
-
-    /**
-     * @OA\Get(
-     *  tags={"schedules"},
-     *  path="/api/auth/schedule/confirmed",
-     *  operationId="listConfirmedSchedules",
-     *  summary="list all confirmed schedules",
-     *  @OA\Response(response="200",
-     *    description="Validation Response",
-     *  ),
-     *  security={{ "apiAuth": {} }}
-     * )
-     */
-    public function confirmed(): JsonResource
-    {
-        $schedules = Schedule::where('status', 'confirmed');
-
-        return ScheduleResource::collection($schedules);
-    }
-
-    /**
-     * @OA\Get(
-     *  tags={"schedules"},
-     *  path="/api/auth/schedule/canceled",
-     *  operationId="listCanceledSchedules",
-     *  summary="list all canceled schedules",
-     *  @OA\Response(response="200",
-     *    description="Validation Response",
-     *  ),
-     *  security={{ "apiAuth": {} }}
-     * )
-     */
-    public function canceled(): JsonResource
-    {
-        $schedules = Schedule::where('status', 'canceled');
-
-        return ScheduleResource::collection($schedules);
-    }
-
-    /**
-     * @OA\Post(
-     *  tags={"schedules"},
-     *  path="/api/auth/schedule/{id}/assign",
-     *  operationId="assignSchedule",
-     *  summary="client assign to a schedule",
-     *  @OA\Parameter(
-     *         description="schedule id",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *  @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(
-     *                     property="client_id",
-     *                     type="integer"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="pet_id",
-     *                     type="integer"
-     *                 ),
-     *                 example={
-     *                          "client_id": 12,
-     *                          "pet_id": 55,
-     *                  }
-     *             )
-     *         )
-     *     ),
-     *  @OA\Response(response="200",
-     *    description="Successfully updated",
-     *  ),
-     *  @OA\Response(response="204",
-     *    description="Content not found",
-     *  ),
-     *  @OA\Response(response="400",
-     *    description="This schedule cannot be assigned as its status is no longer open",
-     *  ),
-     * security={{ "apiAuth": {} }}
-     * )
-     */
-    public function assign(AssignScheduleRequest $request, int $id): JsonResponse
-    {
-        $schedule = Schedule::find($id);
-
-        if (!$schedule) {
-            throw new DomainException('Content not found', 204);
-        }
-
-        if( in_array($schedule->status, ['pending', 'confirmed', 'canceled']) ) {
-            return response()->json([
-                'message' =>  'This schedule cannot be assigned as its status is no longer open'
-            ], 400);
-            // throw new DomainException('This schedule cannot be assigned as its status is no longer open', 400);
-        }
-
-        // add to service and throw exceptions
-        $user = User::find($request->get('client_id'));
-
-        if( !$user->pets()->exists() ) {
-            return response()->json([
-                'message' =>  'User cannot schedule service without having a pet registered'
-            ], 400);
-            // throw new DomainException('This user cannot be assigned as it doesn\'t have a pet registered', 400);
-        }
-
-        $now = new DateTime();
-
-        $schedule->client_id = $user->id;
-        $schedule->status = 'pending';
-        $schedule->save();
-
-        $confirmationUrl = URL::temporarySignedRoute(
-            'schedule.confirm', now()->addMinutes(60), ['id' => $schedule->id]
-        );
-
-        Notification::send($schedule->client, new Confirmation($schedule, $confirmationUrl));
-
-        return response()->json([
-            'message' => 'Schedule successfully assigned'
-        ], 200);
-    }
-    
-    public function confirm(int $id): JsonResponse
-    {
-        $schedule = Schedule::find($id);
-
-        if( !$schedule ){
-            throw new DomainException('Content not found', 204);
-        }
-        
-        if( !in_array($schedule->status, ['pending']) ) {
-            return response()->json([
-                'message' =>  'This schedule cannot be confirmed as its status is no longer pending'
-            ], 400);
-            // throw new DomainException('This schedule cannot be confirmed as its status is no longer pending', 400);
-        }
-
-        $schedule->status = 'confirmed';
-        $schedule->save();
-
-        Notification::send([
-            $schedule->client,
-            $schedule->vet
-        ], new Confirmed($schedule));
-
-        return response()->json([
-            'message' => 'Schedule successfully confirmed'
-        ], 200);
-    }
-
-    /**
-     * @OA\Post(
-     *  tags={"schedules"},
-     *  path="/api/auth/schedule/{id}/cancel",
-     *  operationId="cancelSchedule",
-     *  summary="cancel schedule",
-     *  @OA\Parameter(
-     *         description="schedule id",
-     *         in="path",
-     *         name="id",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *  @OA\Response(response="200",
-     *    description="Success",
-     *  ),
-     *  security={{ "apiAuth": {} }}
-     * )
-     */
-    public function cancel(Request $request, int $id): JsonResponse
-    {
-        $schedule = Schedule::find($id);
-        
-        if( !$schedule ){
-            throw new DomainException('Content not found', 204);
-        }
-        
-        if( !in_array($schedule->status, ['pending', 'confirmed']) ) {
-            return response()->json([
-                'message' =>  'This schedule cannot be canceled as its status is no longer pending or confirmed'
-            ], 400);
-            // throw new DomainException('This schedule cannot be canceled as its status is no longer pending or confirmed', 400);
-        }
-        
-        if ($request->user()->cannot('cancel', $schedule)) {
-            return response()->json([
-                'message' => 'You can only cancel your own schedules'
-            ], 403);
-        }
-
-        $schedule->status = 'canceled';
-        $schedule->save();
-
-        Notification::send([
-            $schedule->client,
-            $schedule->vet
-        ], new Canceled($schedule));
-
-        return response()->json([
-            'message' => 'Schedule successfully canceled'
-        ], 200);
-    }
-
-    /**
-     * @OA\Get(
-     *  tags={"schedules"},
      *  path="/api/auth/schedule/{id}",
      *  operationId="searchSchedule",
      *  summary="search schedule by id",
@@ -350,15 +107,49 @@ class ScheduleController extends Controller
      */
     public function store(StoreScheduleRequest $request): JsonResponse
     {
-        $data = $request->only('vet_id', 'date');
-        $data['status'] = 'open';
+        $data = $request->only('date', 'service', 'client_id', 'pet_id', 'vet_id');
         $data['date'] = new Datetime($data['date']);
+        $data['status'] = 'pending';
 
-        Schedule::create($data);
+        $schedule = Schedule::create($data);
+
+        $confirmationUrl = URL::temporarySignedRoute(
+            'schedule.confirm', now()->addMinutes(60), ['id' => $schedule->id]
+        );
+
+        Notification::send($schedule->client, new Confirmation($schedule, $confirmationUrl));
 
         return response()->json([
             'message' => 'Successfully created'
         ], 201);
+    }
+
+    public function confirm(int $id): JsonResponse
+    {
+        $schedule = Schedule::find($id);
+
+        if( !$schedule ){
+            throw new DomainException('Content not found', 204);
+        }
+
+        if( !in_array($schedule->status, ['pending']) ) {
+            return response()->json([
+                'message' =>  'This schedule cannot be confirmed as its status is no longer pending'
+            ], 400);
+            // throw new DomainException('This schedule cannot be confirmed as its status is no longer pending', 400);
+        }
+
+        $schedule->status = 'confirmed';
+        $schedule->save();
+
+        Notification::send([
+            $schedule->client,
+            $schedule->vet
+        ], new Confirmed($schedule));
+
+        return response()->json([
+            'message' => 'Schedule successfully confirmed'
+        ], 200);
     }
 
     /**
@@ -401,16 +192,6 @@ class ScheduleController extends Controller
         if (!$schedule) {
             throw new DomainException('Content not found', 204);
         }
-
-        if( in_array($schedule->status, ['pending', 'confirmed', 'canceled']) ) {
-            throw new DomainException('This schedule cannot be updated as its status is no longer open', 400);
-        }
-
-        // if ($request->user()->cannot('update', $schedule)) {
-        //     return response()->json([
-        //         'message' => 'You can only update your own schedules'
-        //     ], 403);
-        // }
 
         $date = new Datetime($request->only('date')['date']);
         $schedule->update(['date' => $date]);

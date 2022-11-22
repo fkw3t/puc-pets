@@ -15,9 +15,11 @@ class Schedule extends Model
 
     protected $fillable = [
         'vet_id',
+        'pet_id',
         'client_id',
         'date',
-        'status'
+        'service',
+        'status',
     ];
 
     protected function date(): Attribute

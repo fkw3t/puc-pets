@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Schedule;
 
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use App\Rules\AvailableSchedule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -28,14 +29,17 @@ class StoreScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            'vet_id' => ['required', 'exists:vets,id', 'numeric'],
             'date' => [
                 'required',
                 'date',
                 'date_format:d-m-Y H:i',
                 'after:today',
                 new AvailableSchedule($this->request->get('vet_id'))
-            ]
+            ],
+            'service' => ['required', Rule::in(['veterinary', 'aesthetic'])],
+            'client_id' => ['required', 'exists:users,id', 'numeric'],
+            'pet_id' => ['required', 'exists:pets,id', 'numeric'],
+            'vet_id' => ['exists:vets,id', 'numeric'],
         ];
     }
 

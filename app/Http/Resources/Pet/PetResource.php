@@ -20,7 +20,7 @@ class PetResource extends JsonResource
             'name' => $this->name,
             'birth_date' => $this->birth_date,
             'size' => $this->size,
-            'owner' => new UserResource($this->whenLoaded('owner'))
+            'owner' => $this->owner
         ];
     }
 }
