@@ -22,12 +22,12 @@ class Schedule extends Model
         'status',
     ];
 
-    protected function date(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value->format('d-m-Y H:i')
-        );
-    }
+    // protected function date(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => $value->format('d-m-Y H:i')
+    //     );
+    // }
 
     public function pet(): BelongsTo
     {

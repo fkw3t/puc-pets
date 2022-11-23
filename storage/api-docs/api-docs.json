@@ -329,17 +329,29 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "vet_id": {
-                                        "type": "integer"
-                                    },
                                     "date": {
                                         "type": "string"
+                                    },
+                                    "service": {
+                                        "type": "string"
+                                    },
+                                    "client_id": {
+                                        "type": "integer"
+                                    },
+                                    "pet_id": {
+                                        "type": "integer"
+                                    },
+                                    "vet_id": {
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object",
                                 "example": {
-                                    "vet_id": 1,
-                                    "date": "01-01-2025 12:00"
+                                    "date": "01-01-2025 12:00",
+                                    "service": "veterinary",
+                                    "client_id": 1,
+                                    "pet_id": 1,
+                                    "vet_id": 1
                                 }
                             }
                         }

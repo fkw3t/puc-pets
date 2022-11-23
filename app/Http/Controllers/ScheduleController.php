@@ -85,17 +85,32 @@ class ScheduleController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 @OA\Property(
-     *                     property="vet_id",
-     *                     type="integer"
-     *                 ),
-     *                 @OA\Property(
      *                     property="date",
      *                     type="string"
      *                 ),
+     *                 @OA\Property(
+     *                     property="service",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="client_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="pet_id",
+     *                     type="integer"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="vet_id",
+     *                     type="integer"
+     *                 ),
      *                 example={
+     *                          "date": "01-01-2025 12:00",
+     *                          "service": "veterinary",
+     *                          "client_id": 1,
+     *                          "pet_id": 1,
      *                          "vet_id": 1,
-     *                          "date": "01-01-2025 12:00"
-     *                  }
+     *                  },
      *             )
      *         )
      *     ),
@@ -143,8 +158,7 @@ class ScheduleController extends Controller
         $schedule->save();
 
         Notification::send([
-            $schedule->client,
-            $schedule->vet
+            $schedule->client
         ], new Confirmed($schedule));
 
         return response()->json([

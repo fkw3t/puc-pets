@@ -47,7 +47,7 @@ class Confirmation extends Notification
     {
         return (new MailMessage)
             ->line('Schedule confirmation')
-            ->line("Hi there, we want you to confirm your pending schedule at {$this->schedule->date}")
+            ->line("Hi there, we want you to confirm your pending schedule at {$this->schedule->date->format('d-m-Y H:i')}")
             ->action('Confirm', $this->confirmationUrl)
             ->line('Thank\'s for using ours services!');
     }
