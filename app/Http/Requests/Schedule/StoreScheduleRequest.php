@@ -39,7 +39,7 @@ class StoreScheduleRequest extends FormRequest
             'service' => ['required', Rule::in(['veterinary', 'aesthetic'])],
             'client_id' => ['required', 'exists:users,id', 'numeric'],
             'pet_id' => ['required', 'exists:pets,id', 'numeric'],
-            'vet_id' => ['exists:vets,id', 'numeric'],
+            'vet_id' => ['exists:vets,id', 'numeric', 'nullable'],
         ];
     }
 
