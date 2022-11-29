@@ -125,6 +125,7 @@ class ScheduleController extends Controller
         $data = $request->only('date', 'service', 'client_id', 'pet_id', 'vet_id');
         $data['date'] = new Datetime($data['date']);
         $data['status'] = 'pending';
+        $data['vet_id'] = isset($data['vet_id']) ? $data['vet_id'] : null;
 
         $schedule = Schedule::create($data);
 

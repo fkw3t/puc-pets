@@ -33,8 +33,7 @@ class StoreScheduleRequest extends FormRequest
                 'required',
                 'date',
                 'date_format:d-m-Y H:i',
-                'after:today',
-                new AvailableSchedule($this->request->get('vet_id'))
+                'after:today'
             ],
             'service' => ['required', Rule::in(['veterinary', 'aesthetic'])],
             'client_id' => ['required', 'exists:users,id', 'numeric'],

@@ -32,9 +32,10 @@ return new class extends Migration
             $table->foreign('client_id')
                 ->references('id')
                 ->on('users');
-            $table->foreignId('vet_id')
-                ->constrained()
-                ->nullable();
+            $table->unsignedBigInteger('vet_id')->nullable();
+            $table->foreign('vet_id')
+                ->references('id')
+                ->on('vets');
             $table->timestamps();
         });
     }
