@@ -22,6 +22,7 @@ class ScheduleResource extends JsonResource
             'status' => $this->status,
             'date' => $this->date,
             'vet' => $this->vet,
+            'vet_details' => $this->vet->details,
             'pet' => $this->pet,
             'client' => $this->client
         ];
